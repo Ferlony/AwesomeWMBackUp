@@ -1,10 +1,10 @@
 local function wallpapers()
     local wallpaper = {}
-    wallpaper.DSsoller                      = "wall.png"
-    wallpaper.DiscoElysium                  = "dep.png"
+    local gen_folder = "gen/"
 
-    local chosen_wallpaper = wallpaper.DiscoElysium
-    
+    wallpaper.DSmin                         = gen_folder .. "dsmin.jpg"
+
+    local chosen_wallpaper = wallpaper.DSmin
     return chosen_wallpaper
 end
 return wallpapers

@@ -514,6 +514,12 @@ globalkeys = mytable.join(
         end,
         {description = "volume down", group = "hotkeys"}),
 
+    awful.key({ }, "#121",
+        function ()
+            volume_widget:toggle()
+        end,
+        {description = "toggle mute", group = "hotkeys"}),
+
     --awful.key({ }, "#122", function () awful.util.spawn("amixer -D pulse sset Master 5%-") end),
     --awful.key({ }, "#123", function () awful.util.spawn("amixer -D pulse sset Master 5%+") end),
     
@@ -861,9 +867,9 @@ client.connect_signal("request::titlebars", function(c)
             layout  = wibox.layout.flex.horizontal
         },
         { -- Right
+            awful.titlebar.widget.floatingbutton (c),
             awful.titlebar.widget.ontopbutton(c),
             awful.titlebar.widget.minimizebutton (c),
-            --awful.titlebar.widget.floatingbutton (c),
             awful.titlebar.widget.maximizedbutton(c),
             --awful.titlebar.widget.stickybutton   (c),
             awful.titlebar.widget.closebutton    (c),

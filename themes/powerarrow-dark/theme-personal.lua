@@ -22,9 +22,9 @@ local chosen_wallpaper = wallpaper()
 local os = os
 local my_table = awful.util.table or gears.table -- 4.{0,1} compatibility
 
-local genfont = "Roboto Regular Nerd 12"--"Fira Code Regular 12" --
+local genfont = "Iosevka Nerd Font 12" --Roboto Regular Nerd 10"--"Fira Code Regular 12" --
 
-local wibox_dpi = 22
+local wibox_dpi = 20
 
 local colors = {}
 colors.white = "#FFFFFF"
@@ -64,7 +64,7 @@ theme.titlebar_fg_focus                         = colors.red --theme.fg_focus
 theme.normal_transparent                        = colors.black .. "BB"
 
 theme.menu_height                               = dpi(16)
-theme.menu_width                                = dpi(140)
+theme.menu_width                                = dpi(130)
 theme.menu_submenu_icon                         = theme.dir .. "/icons/submenu.png"
 theme.taglist_squares_sel                       = theme.dir .. "/icons/square_sel.png"
 theme.taglist_squares_unsel                     = theme.dir .. "/icons/square_unsel.png"
@@ -118,10 +118,11 @@ theme.titlebar_minimize_button_normal_active      = theme.dir .. "/icons/titleba
 theme.titlebar_minimize_button_focus_inactive     = theme.dir .. "/icons/titlebar/sticky_focus_inactive.png"
 theme.titlebar_minimize_button_normal_inactive    = theme.dir .. "/icons/titlebar/sticky_normal_inactive.png"
 
--- theme.titlebar_floating_button_focus_active     = theme.dir .. "/icons/titlebar/floating_focus_active.png"
--- theme.titlebar_floating_button_normal_active    = theme.dir .. "/icons/titlebar/floating_normal_active.png"
--- theme.titlebar_floating_button_focus_inactive   = theme.dir .. "/icons/titlebar/floating_focus_inactive.png"
--- theme.titlebar_floating_button_normal_inactive  = theme.dir .. "/icons/titlebar/floating_normal_inactive.png"
+theme.titlebar_floating_button_focus_active     = theme.dir .. "/icons/titlebar/floating_focus_active.png"
+theme.titlebar_floating_button_normal_active    = theme.dir .. "/icons/titlebar/floating_normal_active.png"
+theme.titlebar_floating_button_focus_inactive   = theme.dir .. "/icons/titlebar/floating_focus_inactive.png"
+theme.titlebar_floating_button_normal_inactive  = theme.dir .. "/icons/titlebar/floating_normal_inactive.png"
+
 theme.titlebar_maximized_button_focus_active    = theme.dir .. "/icons/titlebar/maximized_focus_active.png"
 theme.titlebar_maximized_button_normal_active   = theme.dir .. "/icons/titlebar/maximized_normal_active.png"
 theme.titlebar_maximized_button_focus_inactive  = theme.dir .. "/icons/titlebar/maximized_focus_inactive.png"
@@ -140,7 +141,13 @@ theme.titlebar_maximized_button_normal_inactive = theme.dir .. "/icons/titlebar/
 local markup = lain.util.markup
 local separators = lain.util.separators
 
-local keyboardlayout = awful.widget.keyboardlayout:new()
+--widget:set_markup(markup.font(theme.font, markup("#EA6F81", artist) .. title))
+
+local keyboardlayout = awful.widget.keyboardlayout:new(
+  function (widget, stdout)
+    widget:set_markup(markup.font(theme.font, stdout))
+  end
+)
 --local keyboardlayout = wibox.widget.textbox(tostring(awful.widget.keyboardlayout()))
 -- Textclock
 -- local clockicon = wibox.widget.imagebox(theme.widget_clock)
@@ -154,9 +161,9 @@ local keyboardlayout = awful.widget.keyboardlayout:new()
 --mytextclock = wibox.widget.textclock()
 
 local mytextclock = awful.widget.watch(
-    "date +'%a %d %b %R'", 60,
+    "date +'%a %d %b %H:%M' ", 60,
     function(widget, stdout)
-        widget:set_markup(" " .. markup.font(theme.font, stdout) .. " ")
+        widget:set_markup(markup.font(theme.font, stdout))
     end
 )
 
@@ -240,17 +247,18 @@ theme.mail = lain.widget.imap({
 
 -- MEM
 --local memicon = wibox.widget.imagebox(theme.widget_mem)
-local mem = lain.widget.mem({
-    settings = function()
-        widget:set_markup(markup.font(theme.font, " Mem:  " .. mem_now.used .. "MB "))
-    end
-})
+--local mem = lain.widget.mem({
+--    settings = function()
+--        widget:set_markup(markup.font(theme.font, "Mem: " .. mem_now.used .. "Mb" ))
+--    end
+--})
 
 -- CPU
 --local cpuicon = wibox.widget.imagebox(theme.widget_cpu)
 local cpu = lain.widget.cpu({
     settings = function()
-        widget:set_markup(markup.font(theme.font, " Cpu:  " .. cpu_now.usage .. "% "))
+        --widget:set_markup(markup.font(theme.font, " Cpu:  " .. cpu_now.usage .. "% "))
+        widget:set_markup(markup.font(theme.font, "Cpu: " .. cpu_now.usage .. "%"))
     end
 })
 
@@ -258,7 +266,7 @@ local cpu = lain.widget.cpu({
 --local tempicon = wibox.widget.imagebox(theme.widget_temp)
 local temp = lain.widget.temp({
     settings = function()
-        widget:set_markup(markup.font(theme.font, " Temp:  " .. coretemp_now .. "°C "))
+        widget:set_markup(markup.font(theme.font, "Temp: " .. coretemp_now .. "°C"))
     end
 })
 
@@ -280,20 +288,20 @@ local bat = lain.widget.bat({
         if bat_now.status and bat_now.status ~= "N/A" then
             if bat_now.ac_status == 1 then
                 --baticon:set_image(theme.widget_ac)
-                widget:set_markup(markup.font(theme.font, " Bat:  Line "))
+                widget:set_markup(markup.font(theme.font, "Bat: Line"))
             elseif not bat_now.perc and tonumber(bat_now.perc) <= 5 then
-                widget:set_markup(markup.font(theme.font, "  Bat:  Empty  "))
+                widget:set_markup(markup.font(theme.font, "Bat: Empty"))
                 --baticon:set_image(theme.widget_battery_empty)
             elseif not bat_now.perc and tonumber(bat_now.perc) <= 15 then
                 --baticon:set_image(theme.widget_battery_low)
-                widget:set_markup(markup.font(theme.font, " Bat:  Low "))
+                widget:set_markup(markup.font(theme.font, "Bat: Low"))
             else
                 --baticon:set_image(theme.widget_battery)
-                widget:set_markup(markup.font(theme.font, " Bat: "))
+                widget:set_markup(markup.font(theme.font, "Bat: "))
             end
-            widget:set_markup(markup.font(theme.font, " Bat:  " .. bat_now.perc .. "% "))
+            widget:set_markup(markup.font(theme.font, "Bat: " .. bat_now.perc .. "%"))
         else
-            widget:set_markup(markup.font(theme.font, " Bat:  AC "))
+            widget:set_markup(markup.font(theme.font, "Bat: AC"))
             --baticon:set_image(theme.widget_ac)
         end
     end
@@ -379,11 +387,15 @@ function theme.at_screen_connect(s)
     s.quake = lain.util.quake({ app = awful.util.terminal })
 
     -- If wallpaper is a function, call it with the screen
+    
     local wallpaper = theme.wallpaper
     if type(wallpaper) == "function" then
         wallpaper = wallpaper(s)
     end
     gears.wallpaper.maximized(wallpaper, s, true)
+
+    -- null walpaper
+    -- gears.wallpaper.set("#dd3333")
 
     -- Tags
     awful.tag(awful.util.tagnames, s, awful.layout.layouts[1])
@@ -448,29 +460,28 @@ function theme.at_screen_connect(s)
             --wibox.container.background(theme.mail.widget, theme.bg_focus),
             --arrl_dl,
 
-            cpuicon, --wibox.container.background(cpuicon, theme.bg_normal),
+            --cpuicon, --wibox.container.background(cpuicon, theme.bg_normal),
             cpu.widget, --wibox.container.background(cpu.widget, theme.bg_normal),
-            cpu_widget({
-                width = 50,
-                step_width = 3,
-                step_spacing = 1,
-                color = colors.light_blue
-            }),
-            
+            --cpu_widget({
+            --    width = 50,
+            --    step_width = 3,
+            --    step_spacing = 1,
+            --    color = colors.light_blue
+            --}),
             mysep,
-            memicon,
-            mem.widget,
-            mysep,
+            --memicon,
+            --mem.widget,
+            --mysep,
             --arrl_ld,
             --arrl_dl,
-            tempicon,
+            --tempicon,
             temp.widget,
             mysep,
             --arrl_ld,
             --wibox.container.background(fsicon, theme.bg_focus),
             --wibox.container.background(theme.fs.widget, theme.bg_focus),
             --arrl_dl,
-            baticon,
+            --baticon,
             bat.widget,
             --mysep,
             --arrl_ld,
